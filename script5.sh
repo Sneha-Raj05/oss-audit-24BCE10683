@@ -1,28 +1,30 @@
 #!/bin/bash
-# Script 4: Log File Analyzer
+# Script 5: Open Source Manifesto Generator
 # Author: Sneha Raj | Course: Open Source Software
-# Usage: ./log_analyzer.sh /var/log/syslog
 
-LOGFILE=$1
-KEYWORD=${2:-"error"} # Default keyword is 'error'
-COUNT=0
+echo "Answer three questions to generate your personalized manifesto."
+echo
 
-# Check if the log file exists
-if [ ! -f "$LOGFILE" ]; then
-    echo "Error: File $LOGFILE not found."
-    exit 1
-fi
+# Using 'read' for interactive user input
+read -p "1. Name one open-source tool you use every day: " TOOL
+read -p "2. In one word, what does 'freedom' mean to you? " FREEDOM
+read -p "3. Name one thing you would build and share freely: " BUILD
 
-# Use a while-read loop to process the file line by line
-while IFS= read -r LINE; do
-    if echo "$LINE" | grep -iq "$KEYWORD"; then
-        COUNT=$((COUNT + 1))
-    fi
-done < "$LOGFILE"
+# Capture the current date
+DATE=$(date +'%d %B %Y')
+OUTPUT="manifesto_$(whoami).txt"
 
-echo "Keyword '$KEYWORD' found $COUNT times in $LOGFILE"
+# Compose the paragraph using string concatenation
+MANIFESTO="On this day, $DATE, I declare my commitment to the open-source community. 
+The tool I rely on most is $TOOL, which serves as a reminder that software 
+should embody $FREEDOM. In the spirit of collaboration, I pledge to build 
+$BUILD and share it openly with the world."
 
-# Display the last 5 matching lines
-echo "Last 5 matches:"
-grep -i "$KEYWORD" "$LOGFILE" | tail -n 5
+# Write the manifesto to a file
+echo "$MANIFESTO" > "$OUTPUT"
 
+echo "------------------------------------------"
+echo "Manifesto saved to $OUTPUT"
+echo "------------------------------------------"
+# Display the content of the generated file
+cat "$OUTPUT"
